@@ -6,6 +6,6 @@ dist/
 .env.local
 _frame_review/
 
-# Videos are too large for git — store separately (keep public/thumbs for deployment)
+# Original high-res source files — too large for git, keep locally
 /videos/
 /thumbs/
