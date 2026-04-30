@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.DS_Store
+*.log
+.env
+.env.local
+_frame_review/
+
+# Videos are too large for git — store separately (keep public/thumbs for deployment)
+/videos/
+/thumbs/

@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — Left Hook Communications</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0A0A0A;
+  --bg-surface: #111111;
+  --blue: #4A6FA5;
+  --blue-light: #6B8FC7;
+  --text: #F0EEE9;
+  --text-sec: #C8C5BC;
+  --text-muted: #706D64;
+  --border: rgba(255,255,255,0.06);
+  --font-d: 'Bebas Neue', sans-serif;
+  --font-b: 'DM Sans', sans-serif;
+  --font-s: 'Source Serif 4', serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+body { background: var(--bg); color: var(--text); font-family: var(--font-b); overflow-x: hidden; }
+
+/* ═══ NAV ═══ */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 0 48px; height: 68px;
+  display: flex; justify-content: space-between; align-items: center;
+  background: rgba(10,10,10,0.94);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 1px 0 var(--border);
+}
+.nav-logo {
+  display: flex; align-items: baseline; gap: 3px;
+  text-decoration: none; font-family: var(--font-d);
+  font-size: 28px; letter-spacing: 3px; line-height: 1;
+}
+.nav-logo .left { color: var(--blue-light); }
+.nav-logo .hook { color: var(--text); }
+.nav-about {
+  color: #fff; text-decoration: none;
+  font-size: 15px; font-weight: 500; letter-spacing: 1.5px;
+  text-transform: uppercase;
+  position: relative;
+}
+.nav-about::after {
+  content: ''; position: absolute; bottom: -3px; left: 0;
+  width: 100%; height: 1px; background: var(--blue-light);
+}
+
+/* ═══ ABOUT HERO ═══ */
+.about-hero {
+  padding: 140px 48px 0;
+  margin-bottom: 80px;
+}
+
+.about-hero-label {
+  font-size: 14px; font-weight: 700; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--blue-light);
+  margin-bottom: 20px;
+  opacity: 0; animation: fadeUp 0.6s 0.1s forwards;
+}
+
+.about-hero-title {
+  font-family: var(--font-d);
+  font-size: clamp(48px, 6vw, 80px);
+  letter-spacing: 2px; line-height: 0.95;
+  color: #fff; max-width: 700px;
+  opacity: 0; animation: fadeUp 0.6s 0.25s forwards;
+}
+
+/* ═══ BIO SECTION ═══ */
+.bio-section {
+  padding: 0 48px 100px;
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 64px;
+  align-items: start;
+}
+
+.bio-photo {
+  position: relative;
+  border-radius: 6px;
+  overflow: hidden;
+  aspect-ratio: 3/4;
+  background: var(--bg-surface);
+}
+
+.bio-photo-img {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+  filter: grayscale(0.15);
+}
+
+/* Placeholder state */
+.bio-photo-placeholder {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 12px;
+  color: var(--text-muted); font-size: 14px;
+  background: linear-gradient(160deg, #14171D 0%, #1a1e28 50%, #111418 100%);
+}
+
+.bio-photo-placeholder svg {
+  width: 48px; height: 48px; stroke: var(--text-muted); opacity: 0.4;
+}
+
+.bio-photo-accent {
+  position: absolute; bottom: -8px; left: -8px;
+  width: 80px; height: 80px;
+  border-left: 2px solid var(--blue-light);
+  border-bottom: 2px solid var(--blue-light);
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.bio-content { padding-top: 16px; }
+
+.bio-name {
+  font-family: var(--font-d);
+  font-size: 42px; letter-spacing: 2px;
+  margin-bottom: 6px; color: #fff;
+}
+
+.bio-role {
+  font-size: 16px; font-weight: 600; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--blue-light);
+  margin-bottom: 36px;
+}
+
+.bio-text {
+  font-family: var(--font-s);
+  font-size: 19px; line-height: 1.75;
+  color: var(--text-sec); font-weight: 300;
+}
+
+.bio-text p {
+  margin-bottom: 24px;
+}
+
+.bio-text p:last-child { margin-bottom: 0; }
+
+/* Pull quote inside bio */
+.bio-pullquote {
+  margin: 40px 0;
+  padding: 32px 0 32px 28px;
+  border-left: 2px solid var(--blue-light);
+}
+
+.bio-pullquote blockquote {
+  font-family: var(--font-s);
+  font-size: 21px; font-style: italic;
+  line-height: 1.6; color: var(--text);
+  font-weight: 300;
+  margin-bottom: 12px;
+}
+
+.bio-pullquote cite {
+  font-family: var(--font-b);
+  font-style: normal; font-size: 14px;
+  color: var(--text-muted); font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+/* ═══ PRESS SECTION ═══ */
+.press-section {
+  padding: 80px 48px 100px;
+  border-top: 1px solid var(--border);
+}
+
+.press-label {
+  font-size: 14px; font-weight: 700; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--text-muted);
+  margin-bottom: 48px;
+}
+
+.press-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px;
+}
+
+.press-item {
+  padding: 0 0 0 24px;
+  border-left: 1px solid rgba(107,143,199,0.25);
+}
+
+.press-quote-text {
+  font-family: var(--font-s);
+  font-size: 20px; font-style: italic;
+  line-height: 1.6; color: var(--text);
+  font-weight: 300; margin-bottom: 14px;
+}
+
+.press-source {
+  font-size: 13px; font-weight: 600;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* ═══ CONTACT ═══ */
+.contact-section {
+  padding: 120px 48px 80px;
+  display: flex; justify-content: space-between;
+  align-items: center; gap: 60px;
+}
+.contact-title {
+  font-family: var(--font-d);
+  font-size: clamp(64px, 9vw, 112px);
+  letter-spacing: 3px; line-height: 0.92;
+}
+.contact-title .t-lets { color: var(--blue-light); }
+.contact-title .t-talk { color: #fff; }
+.contact-right { max-width: 420px; }
+.contact-desc {
+  font-size: 20px; color: var(--text-sec);
+  line-height: 1.55; margin-bottom: 32px; font-weight: 400;
+}
+.contact-btn {
+  display: inline-block; padding: 18px 52px;
+  background: #fff; color: var(--blue);
+  text-decoration: none; font-size: 15px; font-weight: 700;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  border-radius: 40px;
+  transition: transform 0.2s, box-shadow 0.3s;
+  animation: subtlePulse 3s ease-in-out infinite;
+}
+.contact-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 28px rgba(255,255,255,0.18);
+  animation: none;
+}
+@keyframes subtlePulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0); }
+  50% { box-shadow: 0 0 0 10px rgba(255,255,255,0.06); }
+}
+
+/* ═══ FOOTER ═══ */
+.footer {
+  padding: 40px 48px 28px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.footer-copy { font-size: 13px; color: var(--text-muted); }
+.footer-privacy a { font-size: 13px; color: var(--text-muted); text-decoration: none; transition: color 0.3s; }
+.footer-privacy a:hover { color: var(--text-sec); }
+
+/* ═══ ANIMATIONS ═══ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.reveal {
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 0.6s cubic-bezier(0.16,1,0.3,1), transform 0.6s cubic-bezier(0.16,1,0.3,1);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ═══ TABLET ═══ */
+@media (max-width: 1024px) {
+  .nav { padding: 0 32px; }
+  .about-hero { padding: 130px 32px 0; margin-bottom: 64px; }
+  .bio-section { padding: 0 32px 80px; gap: 48px; }
+  .press-section { padding: 64px 32px 80px; }
+  .contact-section { padding: 100px 32px 64px; }
+  .footer { padding: 32px 32px 24px; }
+}
+
+/* ═══ MOBILE ═══ */
+@media (max-width: 768px) {
+  .nav { padding: 0 20px; height: 56px; }
+  .nav-logo { font-size: 22px; letter-spacing: 2px; }
+  .nav-about { font-size: 13px; }
+
+  .about-hero { padding: 100px 20px 0; margin-bottom: 48px; }
+
+  .bio-section {
+    padding: 0 20px 64px;
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+  .bio-photo { max-height: 480px; }
+  .bio-photo-accent { display: none; }
+  .bio-name { font-size: 36px; }
+  .bio-text { font-size: 17px; }
+  .bio-pullquote blockquote { font-size: 18px; }
+
+  .press-section { padding: 48px 20px 64px; }
+  .press-grid { grid-template-columns: 1fr; gap: 28px; }
+  .press-quote-text { font-size: 18px; }
+
+  .contact-section {
+    flex-direction: column; align-items: flex-start;
+    gap: 28px; padding: 72px 20px 52px;
+  }
+  .contact-right { max-width: 100%; }
+  .footer { padding: 20px; flex-direction: column; gap: 6px; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="/" class="nav-logo"><span class="left">LEFT</span><span class="hook">HOOK</span></a>
+  <a href="/about" class="nav-about">About</a>
+</nav>
+
+<!-- ABOUT HERO -->
+<section class="about-hero">
+  <div class="about-hero-label">About Left Hook</div>
+  <h1 class="about-hero-title">AWARD-WINNING POLITICAL STRATEGY & MEDIA</h1>
+</section>
+
+<!-- BIO -->
+<section class="bio-section">
+
+  <div class="bio-photo reveal">
+    <img class="bio-photo-img" src="assets/brandon_hall.jpg" alt="Brandon Hall, Founder of Left Hook Communications">
+    <div class="bio-photo-accent"></div>
+  </div>
+
+  <div class="bio-content reveal" style="transition-delay: 0.1s">
+    <h2 class="bio-name">BRANDON HALL</h2>
+    <div class="bio-role">Founder & Partner</div>
+
+    <div class="bio-text">
+      <p>Brandon Hall has spent more than 25 years on the front lines of American politics, helping win some of the toughest races in the country. In 2010, he managed Senate Majority Leader Harry Reid's hard-fought re-election in Nevada—one of the cycle's most consequential victories.</p>
+
+      <div class="bio-pullquote">
+        <blockquote>"A top-to-bottom machine that will never be reproduced again in this state — research, media relations, rapid response, television ads, voter targeting, polling. This campaign left nothing to chance because it knew it couldn't afford to."</blockquote>
+        <cite>Jon Ralston, Nevada political reporter — on the Reid campaign</cite>
+      </div>
+
+      <p>Since then, Brandon has become an award-winning strategist and media consultant, crafting ad campaigns for Senators Martin Heinrich, Mark Kelly, Jon Tester, and other high-profile candidates. He specializes in high-stakes contests across the Western United States and has worked on 11 U.S. Senate races, winning 8.</p>
+
+      <p>Brandon is also the co-founder of Public Land Warriors, built around a simple mandate: If you take our land, we take your seat.</p>
+
+      <p>Brandon lives in Venice, CA with his partner Jessica and two children, Ollie and Laney.</p>
+    </div>
+  </div>
+
+</section>
+
+<!-- PRESS QUOTES -->
+<section class="press-section">
+  <div class="press-label reveal">What They're Saying</div>
+  <div class="press-grid">
+    <div class="press-item reveal">
+      <p class="press-quote-text">"One of the election's most striking ads."</p>
+      <div class="press-source">Politico</div>
+    </div>
+    <div class="press-item reveal" style="transition-delay: 0.05s">
+      <p class="press-quote-text">"A welcome oasis in a sea of mud."</p>
+      <div class="press-source">The New York Times</div>
+    </div>
+    <div class="press-item reveal" style="transition-delay: 0.1s">
+      <p class="press-quote-text">"The first grand-slam, out of the park, absolutely perfect Democratic campaign ad of the entire year."</p>
+      <div class="press-source">Rachel Maddow</div>
+    </div>
+    <div class="press-item reveal" style="transition-delay: 0.15s">
+      <p class="press-quote-text">"Powerful, personal video... emotional storytelling."</p>
+      <div class="press-source">Adweek</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-section reveal" id="contact">
+  <div><h2 class="contact-title"><span class="t-lets">LET'S</span><br><span class="t-talk">TALK</span></h2></div>
+  <div class="contact-right">
+    <p class="contact-desc">Running for public office or advancing a ballot measure? We'd love to hear about your race.</p>
+    <a href="mailto:info@lefthookcomms.com" class="contact-btn">Get in touch</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-copy">&copy; 2026 Left Hook Communications</div>
+  <div class="footer-privacy"><a href="/privacy">Privacy Policy</a></div>
+</footer>
+
+<script>
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+}, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
