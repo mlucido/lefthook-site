@@ -40,7 +40,7 @@ export default function VideoModal({ video, onClose }) {
     if (isOpen && video) {
       player.source = {
         type: 'video',
-        sources: [{ src: video.video_url, type: 'video/mp4' }],
+        sources: [{ src: `${import.meta.env.BASE_URL}${video.video_url.replace(/^\//, '')}`, type: 'video/mp4' }],
       }
       document.body.style.overflow = 'hidden'
       setTimeout(() => {

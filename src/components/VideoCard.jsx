@@ -1,6 +1,9 @@
 export default function VideoCard({ video, onPlay, revealDelay }) {
   const thumbStyle = video.thumbnail_url
-    ? { backgroundImage: `url(${video.thumbnail_url})` }
+    ? {
+        backgroundImage: `url(${import.meta.env.BASE_URL}${video.thumbnail_url.replace(/^\//, '')})`,
+        ...(video.thumb_brightness ? { filter: `brightness(${video.thumb_brightness})` } : {}),
+      }
     : { background: 'linear-gradient(160deg,#1a2535,#0f1a2a 40%,#1e2d42)' }
 
   return (
@@ -18,7 +21,6 @@ export default function VideoCard({ video, onPlay, revealDelay }) {
       </div>
       <div className="video-label">
         <div className="video-client-name">{video.campaign}</div>
-        <div className="video-spot-title">{video.title}</div>
       </div>
     </div>
   )
