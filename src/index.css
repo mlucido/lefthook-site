@@ -99,6 +99,13 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-b); ov
   gap: 16px;
 }
 
+/* explicit placement: col1=Martin/Tim, col2=Dina/Pete, col3=Harry (tall) */
+.video-grid .video-card:nth-child(1) { grid-column: 1; grid-row: 1; }
+.video-grid .video-card:nth-child(2) { grid-column: 2; grid-row: 1; }
+.video-grid .video-card:nth-child(3) { grid-column: 3; grid-row: 1 / 3; }
+.video-grid .video-card:nth-child(4) { grid-column: 1; grid-row: 2; }
+.video-grid .video-card:nth-child(5) { grid-column: 2; grid-row: 2; }
+
 /* 6-card layout: last card spans full width */
 .video-grid .video-card:nth-child(6) {
   grid-column: 1 / -1;
@@ -593,9 +600,14 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-b); ov
 
   .work-section { padding: 40px 20px 56px; }
   .video-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
-  .video-card.tall { grid-row: auto; aspect-ratio: 9/14; max-height: 500px; }
-  /* 6th card: restore normal proportions on mobile */
-  .video-grid .video-card:nth-child(6) { aspect-ratio: 16/9; grid-column: auto; }
+  .video-card.tall { grid-row: auto; aspect-ratio: 16/9; max-height: none; }
+  /* reset all explicit placements to single column */
+  .video-grid .video-card:nth-child(1),
+  .video-grid .video-card:nth-child(2),
+  .video-grid .video-card:nth-child(3),
+  .video-grid .video-card:nth-child(4),
+  .video-grid .video-card:nth-child(5),
+  .video-grid .video-card:nth-child(6) { grid-column: auto; grid-row: auto; aspect-ratio: 16/9; }
   .video-label { opacity: 1; transform: translateY(0); }
   .play-btn { opacity: 1; transform: translate(-50%,-50%) scale(1); width: 56px; height: 56px; }
   .play-btn svg { width: 18px; height: 18px; }
