@@ -664,7 +664,7 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-b); ov
   .footer { padding: 20px; flex-direction: column; gap: 6px; align-items: flex-start; }
 
   .modal-overlay { padding: 12px; align-items: flex-start; padding-top: 60px; }
-  .modal-close-btn { top: 12px; right: 12px; width: 38px; height: 38px; }
+  .modal-close-btn { top: 12px; right: 12px; width: 44px; height: 44px; }
   .modal-campaign { font-size: 20px; }
   .modal-info { flex-direction: column; gap: 4px; }
 
@@ -691,4 +691,6 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-b); ov
   .contact-title { font-size: 64px; }
   .work-section { padding: 32px 20px 48px; }
   .contact-desc { font-size: 17px; }
+  .closing-band { padding: 64px 24px; }
+  .closing-band__stmt { font-size: 26px; }
 }

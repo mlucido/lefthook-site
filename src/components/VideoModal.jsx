@@ -42,13 +42,25 @@ export default function VideoModal({ video, onClose }) {
         type: 'video',
         sources: [{ src: `${import.meta.env.BASE_URL}${video.video_url.replace(/^\//, '')}`, type: 'video/mp4' }],
       }
+      // iOS Safari requires position:fixed scroll lock (overflow:hidden alone is ignored)
+      const scrollY = window.scrollY
+      document.body.style.position = 'fixed'
+      document.body.style.top = `-${scrollY}px`
+      document.body.style.width = '100%'
       document.body.style.overflow = 'hidden'
+      // 100ms keeps us within iOS's user-gesture window for autoplay
       setTimeout(() => {
         playerRef.current?.play().catch(() => {})
-      }, 400)
+      }, 100)
     } else {
       player.pause()
+      // Restore scroll position after unlocking
+      const scrollY = Math.abs(parseInt(document.body.style.top || '0', 10))
+      document.body.style.position = ''
+      document.body.style.top = ''
+      document.body.style.width = ''
       document.body.style.overflow = ''
+      window.scrollTo(0, scrollY)
       setTimeout(() => {
         if (playerRef.current) {
           playerRef.current.source = { type: 'video', sources: [] }
