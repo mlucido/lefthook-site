@@ -663,7 +663,7 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-b); ov
   .contact-right { max-width: 100%; }
   .footer { padding: 20px; flex-direction: column; gap: 6px; align-items: flex-start; }
 
-  .modal-overlay { padding: 12px; align-items: flex-start; padding-top: 60px; }
+  .modal-overlay { padding: 12px; align-items: flex-start; padding-top: 60px; justify-content: flex-start; }
   .modal-close-btn { top: 12px; right: 12px; width: 44px; height: 44px; }
   .modal-campaign { font-size: 20px; }
   .modal-info { flex-direction: column; gap: 4px; }
