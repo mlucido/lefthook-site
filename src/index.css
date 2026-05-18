@@ -126,7 +126,7 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-b); ov
   background-size: cover; background-position: center top;
   transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s;
   /* Unified grade: light desaturation keeps color while pulling palette together */
-  filter: grayscale(0.38) brightness(0.84) contrast(1.08) saturate(1.1);
+  filter: grayscale(0.20) brightness(0.93) contrast(1.06) saturate(1.15);
 }
 
 /* Subtle blue cast — unifies warm/cool footage without killing the image */
@@ -134,7 +134,7 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-b); ov
   position: absolute; inset: 0;
   background: #3a5a96;
   mix-blend-mode: multiply;
-  opacity: 0.28;
+  opacity: 0.18;
   z-index: 1; pointer-events: none;
   transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -148,7 +148,7 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-b); ov
 /* Hover: fully reveal the ad's natural color */
 .video-card:hover .video-thumb {
   transform: scale(1.06);
-  filter: grayscale(0) brightness(0.94) contrast(1.03) saturate(1.2);
+  filter: grayscale(0) brightness(1.0) contrast(1.02) saturate(1.25);
 }
 .video-card:hover .video-tint { opacity: 0.06; }
 .video-card:hover .video-shade {

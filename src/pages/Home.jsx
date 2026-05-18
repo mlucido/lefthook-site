@@ -18,7 +18,7 @@ export default function Home() {
           <h1 className="hero-title">
             HIT 'EM WITH THAT <span style={{ color: 'var(--blue-light)' }}>LEFT</span> HOOK
           </h1>
-          <p className="hero-sub">Marrying strategy with award-winning media.</p>
+          <p className="hero-sub">Strategy that wins. Creative that hits.</p>
         </div>
       </section>
 
