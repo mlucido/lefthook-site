@@ -38,7 +38,7 @@ export default function ContactSection() {
         <p className="contact-desc">
           Running for public office or advancing a ballot measure? We'd love to hear about your race.
         </p>
-        <a href="mailto:info@lefthookcomms.com" className="contact-btn">
+        <a href="mailto:brandon@lefthookstrategy.com" className="contact-btn">
           Get in touch
         </a>
       </div>

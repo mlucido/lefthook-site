@@ -10,8 +10,8 @@ export default function Privacy() {
         <p className="privacy-updated">Last updated: April 30, 2026</p>
 
         <p>
-          Left Hook Communications ("Left Hook," "we," "us," or "our") operates the website
-          lefthookcomms.com (the "Site"). This Privacy Policy explains how we collect, use,
+          Left Hook Strategy ("Left Hook," "we," "us," or "our") operates the website
+          lefthookstrategy.com (the "Site"). This Privacy Policy explains how we collect, use,
           and protect information about visitors to our Site.
         </p>
 
@@ -70,7 +70,7 @@ export default function Privacy() {
           Depending on your location, you may have certain rights regarding your personal
           information, including the right to access, correct, or delete information we hold
           about you. To exercise these rights, please contact us at{' '}
-          <a href="mailto:info@lefthookcomms.com">info@lefthookcomms.com</a>.
+          <a href="mailto:brandon@lefthookstrategy.com">brandon@lefthookstrategy.com</a>.
         </p>
 
         <h2>7. Changes to This Policy</h2>
@@ -82,7 +82,7 @@ export default function Privacy() {
 
         <p>
           If you have questions about this Privacy Policy, please contact us at{' '}
-          <a href="mailto:info@lefthookcomms.com">info@lefthookcomms.com</a>.
+          <a href="mailto:brandon@lefthookstrategy.com">brandon@lefthookstrategy.com</a>.
         </p>
       </div>
       <Footer />
