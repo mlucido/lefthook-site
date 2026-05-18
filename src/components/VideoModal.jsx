@@ -7,6 +7,7 @@ const PLYR_CONFIG = {
   resetOnEnd: true,
   tooltips: { controls: false, seek: true },
   keyboard: { focused: true, global: false },
+  fullscreen: { enabled: true, fallback: true, iosNative: true },
 }
 
 export default function VideoModal({ video, onClose }) {
