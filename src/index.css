@@ -469,11 +469,10 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-b); ov
 .closing-band__stmt {
   font-family: var(--font-d);
   font-weight: 700;
-  font-size: 50px;
+  font-size: clamp(20px, 3vw, 44px);
   line-height: 1.12;
   text-transform: uppercase;
   letter-spacing: 0.01em;
-  max-width: 900px;
   margin: 0 auto;
   color: #0a0a0a;
 }
