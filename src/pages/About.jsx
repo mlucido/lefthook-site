@@ -17,7 +17,7 @@ export default function About() {
           <img
             className="bio-photo-img"
             src={`${import.meta.env.BASE_URL}assets/brandon_hall.jpg`}
-            alt="Brandon Hall, Founder of Left Hook Communications"
+            alt="Brandon Hall, Founder of Left Hook"
           />
         </div>
 

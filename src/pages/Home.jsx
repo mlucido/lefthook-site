@@ -41,7 +41,7 @@ export default function Home() {
       <section className="closing-band">
         <p className="closing-band__stmt">
           Political media without strategy is just expensive art.
-          <span className="closing-band__attr">— Left Hook Communications</span>
+          <span className="closing-band__attr">— Left Hook</span>
         </p>
       </section>
 
