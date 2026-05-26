@@ -3,6 +3,7 @@
 :root {
   --bg: #0A0A0A;
   --bg-surface: #111111;
+  --brand: #6B8FC7;
   --blue: #4A6FA5;
   --blue-light: #6B8FC7;
   --text: #F0EEE9;
@@ -148,7 +149,7 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-b); ov
 /* Hover: card pops out, thumbnail snaps to full color */
 .video-card:hover {
   transform: scale(1.03);
-  box-shadow: 0 20px 60px rgba(220, 38, 38, 0.15);
+  box-shadow: 0 20px 60px rgba(107, 143, 199, 0.20);
 }
 .video-card:hover .video-thumb {
   transform: scale(1.04);
