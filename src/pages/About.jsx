@@ -7,6 +7,7 @@ export default function About() {
 
   return (
     <>
+      <title>About — Left Hook Strategy</title>
       <section className="about-hero">
         <div className="about-hero-label">About Left Hook</div>
         <h1 className="about-hero-title">AWARD-WINNING POLITICAL STRATEGY &amp; MEDIA</h1>

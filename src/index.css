@@ -7,7 +7,7 @@
   --blue-light: #6B8FC7;
   --text: #F0EEE9;
   --text-sec: #C8C5BC;
-  --text-muted: #706D64;
+  --text-muted: #8C897E;
   --border: rgba(255,255,255,0.06);
   --font-d: 'Bebas Neue', sans-serif;
   --font-b: 'DM Sans', sans-serif;
@@ -564,7 +564,7 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-b); ov
   font-size: 24px; letter-spacing: 1.5px; color: #fff;
 }
 .modal-ad-title {
-  font-size: 15px; color: rgba(255,255,255,0.4);
+  font-size: 15px; color: rgba(255,255,255,0.6);
   font-weight: 400; letter-spacing: 0.3px;
 }
 

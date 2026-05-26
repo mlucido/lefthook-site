@@ -41,7 +41,7 @@ export default function VideoModal({ video, onClose }) {
     if (isOpen && video) {
       player.source = {
         type: 'video',
-        sources: [{ src: `${import.meta.env.BASE_URL}${video.video_url.replace(/^\//, '')}`, type: 'video/mp4' }],
+        sources: [{ src: video.video_url.startsWith('http') ? video.video_url : `${import.meta.env.BASE_URL}${video.video_url.replace(/^\//, '')}`, type: 'video/mp4' }],
       }
       // iOS Safari requires position:fixed scroll lock (overflow:hidden alone is ignored)
       const scrollY = window.scrollY

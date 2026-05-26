@@ -4,6 +4,7 @@ import Footer from '../components/Footer'
 export default function Privacy() {
   return (
     <>
+      <title>Privacy — Left Hook Strategy</title>
       <div className="privacy-page">
         <Link to="/" className="privacy-back">&larr; Back to home</Link>
         <h1>PRIVACY POLICY</h1>

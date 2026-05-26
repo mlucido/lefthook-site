@@ -9,3 +9,6 @@ _frame_review/
 # Original high-res source files — too large for git, keep locally
 /videos/
 /thumbs/
+
+# Web-compressed MP4s — now hosted on Cloudflare R2 (videos.lefthookstrategy.com)
+public/videos/

@@ -12,6 +12,7 @@ export default function Home() {
 
   return (
     <>
+      <title>Left Hook Strategy</title>
       <section className="hero">
         <div className="hero-bg" />
         <div className="hero-content">
