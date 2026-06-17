@@ -55,7 +55,6 @@ export default function About() {
               mandate: If you take our land, we take your seat.
             </p>
 
-            <p>Brandon lives in Venice, CA with his partner Jessica and two children, Ollie and Laney.</p>
           </div>
         </div>
       </section>
