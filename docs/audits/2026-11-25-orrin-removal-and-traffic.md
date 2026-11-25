@@ -70,3 +70,65 @@ Same invalid Cloudflare token; analytics read cannot be called. No classificatio
 - The FTP password appeared in tool output once (an lftp URL echo during my first connection attempt). Consider rotating it.
 - `public/.htaccess` in the repo has drifted from the live file (live has the HTTPS/www redirect; repo has `Options -MultiViews`). Not reconciled.
 - FTP home also holds stray `index.html`, `index-*.js/css`, `brandon_hall.jpg`, `.htaccess` outside public_html; not touched.
+
+---
+
+# T1 follow-up: 404 fix + host scoping
+
+## Backup
+Live `.htaccess` (5732 bytes) saved before any change: `docs/audits/2026-11-25-artifacts/htaccess.live-before-t1` (committed first). Final live copy: `htaccess.live-after-t1`.
+
+## Changes
+- `public/404.html` added (#0A0A0A / #F0EEE9 / #6B8FC7, Bebas Neue "PAGE NOT FOUND", DM Sans line, link to `/`, `noindex`). Fonts come from Google Fonts with system fallbacks.
+- Live root `.htaccess` rewritten; every rule is scoped to `^(www\.)?lefthookstrategy\.com$`, in this order:
+  1. 410 block (now 233 paths, see note), first.
+  2. HTTPS redirect and www to apex redirect, host-scoped (the old rule was unscoped, which sent `http://woketh.com` etc. to Left Hook).
+  3. Real files/dirs served as-is.
+  4. Only `/`, `/about`, `/privacy` (optional trailing slash) rewrite to `/index.html`.
+  5. Everything else gets `[R=404]`, with `ErrorDocument 404 /404.html` inside an Apache 2.4 `<If>` on `HTTP_HOST`.
+- **Deviation:** `404\.html` was one of the 234 paths in the 410 block, so `/404.html` would have returned 410 and the error page would never render. I removed that one entry (233 remain). Nothing else in the block changed.
+- Uploaded `404.html` and `.htaccess` only. Re-downloaded both and confirmed they are byte-identical to `public/404.html` and `public/.htaccess`.
+
+## Verification (curl -sI, via Cloudflare)
+```
+/                          200 text/html
+/about                     200 text/html
+/privacy                   200 text/html
+/orrinevans.html           410
+/orrin-evans.html          410
+/2020reel.html             410
+/zzz-test-123              404 text/html, body <h1>PAGE NOT FOUND</h1>
+/team.html                 404 text/html
+/404.html                  200
+/og-image.png              200 image/png
+/assets/brandon_hall.jpg   200 image/jpeg
+videos.lefthookstrategy.com/web-kelly.mp4 (Range 0-99)  206 video/mp4
+http://lefthookstrategy.com/about   301 -> https://lefthookstrategy.com/about
+https://www.lefthookstrategy.com/about  301 -> https://lefthookstrategy.com/about
+http://woketh.com/         200 (no longer redirects to Left Hook)
+```
+Headless Chromium (networkidle): `/` renders h1 "HIT 'EM WITH THAT LEFT HOOK", `/about` renders h1 "AWARD-WINNING POLITICAL STRATEGY & MEDIA".
+
+## Cohosted domains, before vs after (status and Location)
+| URL | Before | After |
+|---|---|---|
+| http://thesweep.ai/ , https://thesweep.ai/ (and /zzz-test-123) | 200 | 200 (unchanged) |
+| http://thesweep.org/ | 301 -> https://lefthookstrategy.com/ | 200 |
+| https://thesweep.org/ | 200 | 200 |
+| https://thesweep.org/zzz-test-123 | 404 | 404 |
+| http://woketh.com/ | 301 -> https://lefthookstrategy.com/ | 200 |
+| http://yesmeasureb.com/ | 301 -> https://lefthookstrategy.com/ | 200 |
+| http://thefabulouslifeofkarenhandel.com/ | 301 -> https://lefthookstrategy.com/ | 200 |
+| https://woketh.com/, yesmeasureb.com, thefabulouslifeofkarenhandel.com `/` | 200 | 200 |
+| https://woketh.com/zzz-test-123 (same for yesmeasureb, karenhandel) | 200 | 404 |
+| http://woketh.com/zzz-test-123 (same pattern on the other 3) | 301 -> lefthookstrategy.com | 404 |
+| lefthookcomms.com (http and https, `/` and missing path) | 301 -> https://www.lefthookstrategy.com/ | 301 -> https://www.lefthookstrategy.com/ (unchanged; comes from its own config) |
+| payyourtaxesmikegarcia.com | no DNS (000) | not retested |
+
+Intended changes: the http-to-Left-Hook redirects are gone. **Unrequested side effect:** missing paths on woketh.com, yesmeasureb.com and thefabulouslifeofkarenhandel.com used to get a soft 200 (their own `index.html`, via the old unscoped SPA fallback) and now return a real 404. Those are static sites, not SPAs, so I scoped the fallback as asked. If any of them relied on it, add a per-folder `.htaccess`. Raw before/after captures are in `~/cg-ops/lh-t1/`. The HTTPS cert errors on these domains from the earlier audit were not retested, and `-k` was used.
+
+## Cloudflare purge: NOT DONE (needs new token)
+Both token variables in `.env` (`CF_TOKEN`, `CF_TOKEN_USER`) fail verification (`Invalid API Token` on user and account verify endpoints). `docs/HANDOFF.md` has no token values, only the 1Password name. The global key `CF_API_KEY` was not used. Observed: `/orrinevans.html` already returns 410 at the edge (cache HIT, age ~1190s), so no stale 200 was seen from my location, but other colos may still hold old copies until the edge TTL expires. Pages cached before the change (e.g. `/privacy` HIT) are unaffected because their content did not change.
+
+# Traffic analysis: NOT DONE (needs new token)
+The Cloudflare GraphQL analytics call needs a valid token with Zone Analytics:Read. No classification of the 11/16 spike was made. Needs new token.
