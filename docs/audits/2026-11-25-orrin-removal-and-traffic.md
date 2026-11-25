@@ -132,3 +132,54 @@ Both token variables in `.env` (`CF_TOKEN`, `CF_TOKEN_USER`) fail verification (
 
 # Traffic analysis: NOT DONE (needs new token)
 The Cloudflare GraphQL analytics call needs a valid token with Zone Analytics:Read. No classification of the 11/16 spike was made. Needs new token.
+
+---
+
+# Purge + traffic analysis (token retry)
+
+## Token
+New account-owned token written to `.env` as `CF_TOKEN` (`.env` is gitignored, not tracked). Verified via `/accounts/{id}/tokens/verify`: **active** (the `/user/tokens/verify` endpoint returns "Invalid API Token" for account-owned tokens, which is expected). Zone read OK. Capabilities used: Cache Purge and Analytics Read both worked. Global API key not used.
+
+## Purge
+237 unique URLs (233 paths from the 410 block in `public/.htaccess` + `/orrinevans.html`, `/404.html`, `/`, `/about`, `/privacy`; the space in `jobs 2.html` was URL-encoded) in 8 batches of 30 (last 27): **all 8 returned success**. The 410 URLs and `/orrinevans.html` were purged under the https apex host only (not www or other hosts).
+
+`curl -sI /orrinevans.html` x3, 4 s apart:
+```
+HTTP/2 410  cf-cache-status: MISS
+HTTP/2 410  cf-cache-status: HIT
+HTTP/2 410  cf-cache-status: HIT
+```
+Always 410. The HITs are the 410 response itself being cached, not a stale 200.
+
+## Traffic analysis, 2026-11-15 to 2026-11-17 (UTC)
+Plan limits: `httpRequests1hGroups` only reaches back 3 days, so I used `httpRequestsAdaptiveGroups` (sampled, so counts are approximate). **ASN dimensions (`clientAsn`, `clientASNDescription`) are not available on this plan**; country and client IP are used instead. Raw output: `~/cg-ops/lh-t1/analytics.txt`.
+
+**Volume by day (adaptive sample):** 11/15 4,025; 11/16 9,954; 11/17 10,510. Hourly peaks: 11/16 06:00 = 1,219 (daily peak); the overall 3-day peak was 11/17 15:00 = 1,599. So the elevated level lasted into 11/17, not just 11/16.
+
+**Edge status (3 days):** 403 9,082; 301 3,554; 200 3,553; 404 2,801; 525 1,957; 502 1,643; 504 1,132; 204 280; 499 251; other < 120 each.
+**Origin status:** 0 (no origin contact, i.e. edge-served or CF error) 8,754; 403 8,345; 404 2,766; 200 2,354; 502 1,643; 301 260; 304 204.
+**Top paths:** `/` 2,820; `/robots.txt` 384; `/cdn-cgi/rum` 280; `/z0f76a1d14fd21a8fb5fd0d03e0fdc3d3cedae52f` 120; `/userfiles` 119; `/assets/index-DfTdr2Aw.js` 113; `/api/session/properties` 88; `/favicon.ico` 88; `/assets/index-DSX8lW2F.css` 87; `/sitemap.xml` 74; `/favicon-32x32.png` 72; `/index.php` 69; `/console` 67; `/site.webmanifest` 62; `/cgi-bin/php` 61. Also seen: `/.git/HEAD`, `/terraform.tfvars`, `/v1/.env`, `/Dockerrun.aws.json`, a `../../proc/self/environ` traversal.
+**Top user agents:** empty UA 4,203; generic `Mozilla/5.0 (Windows NT 10.0...)` 1,345; "nginx-ssl early hints" 1,100 (Cloudflare internal); Chrome/131 Windows 986; Android Chrome/151 678; old iPhone iOS 13 489; then ~330-380 each for KimiBot, CCBot, Googlebot, Amazonbot, DuckAssistBot, ClaudeBot, Meta-ExternalAgent, Perplexity-User, cohere-ai (the same set also appears with Qwenbot, Bytespider, GrokBot, GPTBot).
+**Top countries:** BE 5,517; US 4,509; SG 3,301; GB 3,193; ZA 2,364; JP 1,028; NL 712; FR 509; KR 473; DE 390.
+**Top IPs:** 34.156.39.58 (3,458), 34.147.217.109, 34.21.138.242, 34.76.159.14 (all 34.x ranges, plausibly Google Cloud in Belgium/Europe; I did not look up ownership), 40.123.240.128, 20.106.103.160 (20.x / 40.x look like Azure ranges, also unverified).
+**Hosts:** traffic is far wider than the apex. Over the 3 days: apex+www 403 4,615 / 200 3,466 / 301 2,105 / 504 982; plus `billing.` (1,643 x 502), `reels.` (404/301/403), `whm.` (403/404), `analytics.` (403), `drive.`, `dashboard.` (670 x 525) subdomains.
+
+## Classification of the 11/16 spike: **scanner** (with a smaller origin-instability component)
+- 06:00 UTC hour (1,219 requests): 1,056 came from the Belgium IP **34.156.39.58**, mostly against `billing.lefthookstrategy.com` (657 requests, 609 of them 502 from origin). Across the 3 days the same IP swept `whm.`, `billing.`, `drive.` and the apex, rotating User-Agents (KimiBot, GPTBot, Meta-ExternalAgent, Android Chrome) from a single IP, which is UA spoofing, not real crawlers. It requested `/.git/HEAD`, `/terraform.tfvars`, `/userfiles`, `/v1/.env`, `/Dockerrun.aws.json`.
+- Human traffic is not the driver. Real-looking pageviews are `/` plus its assets, a few hundred per day, and the home page is a small share of the spike.
+- Real crawlers (Googlebot, ClaudeBot, GPTBot, etc.) are steady background noise, about 330-380 each, not the spike.
+- Origin (GoDaddy) instability is real but secondary: 982 x 504 on the apex over the 3 days, and 1,643 x 502 + 1,957 x 525 on subdomains with no working origin. It looks like a consequence of the scan hitting hostnames that don't serve anything, plus origin timeouts, rather than the cause.
+
+**Action warranted?** Yes, low urgency: the site was not harmed (no 5xx on the 410/404 paths, probes mostly got 403/404), but I'd remove or un-proxy dangling proxied DNS records (`billing`, `whm`, `drive`, `dashboard`, `analytics`, `reels` if unused) and add a free-plan WAF rule blocking `/.git`, `.env`, `terraform` and `/proc/` paths.
+
+## Risks and unverified
+- Adaptive analytics are sampled; numbers are approximate. No ASN data on this plan. Scanner identification rests on one IP's behavior across subdomains; IP ownership was not checked (no whois).
+- Purge covered the apex https URLs only; other cached copies (www, http) were not purged.
+- "Spike" was classified from the 3-day data; the 11/16 06:00 UTC hour is the 11/16 peak, but 11/17 15:00 was higher.
+- The DNS records named above were inferred from traffic, not read from the Cloudflare DNS table.
+
+## Diffstat
+Repo `lefthook-site`: this doc only (plus this commit); `.env` changed locally but is gitignored. No code changed.
+
+## Numbers that moved
+Cache purge: 237 URLs purged. `/orrinevans.html`: 410 (unchanged, now confirmed after purge).
